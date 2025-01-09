@@ -17,15 +17,24 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     }
 
     private func setupWindow(scene: UIScene) {
-        guard let windowScene = scene as? UIWindowScene else { return }
+        guard let windowScene = (scene as? UIWindowScene) else { return }
         
-        let window = UIWindow(windowScene: windowScene)
-        let rootController = HomepageView()
-        let navigationController = UINavigationController(rootViewController: rootController)
-        window.rootViewController = navigationController
-        self.window = window
+        window = UIWindow(windowScene: windowScene)
         
-        window.makeKeyAndVisible()
+        let tabBarController = UITabBarController()
+        
+        let firstViewController = HomepageView()
+        let firstNavController = UINavigationController(rootViewController: firstViewController)
+        firstNavController.tabBarItem = UITabBarItem(title: "Anasayfa", image: UIImage(systemName: "house"), tag: 0)
+        
+        let secondViewController = FavouritesView()
+        let secondNavController = UINavigationController(rootViewController: secondViewController)
+        secondNavController.tabBarItem = UITabBarItem(title: "Favoriler", image: UIImage(systemName: "heart.fill"), tag: 1)
+
+        tabBarController.viewControllers = [firstNavController, secondNavController]
+
+        window?.rootViewController = tabBarController
+        window?.makeKeyAndVisible()
     }
     
     func sceneDidDisconnect(_ scene: UIScene) {
