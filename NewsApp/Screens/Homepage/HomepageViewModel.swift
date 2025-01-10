@@ -33,4 +33,9 @@ class HomepageViewModel {
             
         }
     }
+    
+    func searchNews(for searchText: String, completion: @escaping ([News]) -> Void) {
+        filteredData = networkData.filter { $0.title?.lowercased().contains(searchText.lowercased()) ?? false }
+        completion(filteredData)
+    }
 }

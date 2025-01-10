@@ -8,6 +8,12 @@
 import UIKit
 import SnapKit
 
+//MARK: - Protocols
+
+protocol DataTransferDelegate: AnyObject {
+    func didSubmitData(data: News)
+}
+
 //MARK: - HomepageView
 
 class HomepageView: UIViewController {
@@ -35,6 +41,7 @@ class HomepageView: UIViewController {
     
     var tableViewData: [News] = []
     var viewModel: HomepageViewModel = .init()
+    weak var delegate: DataTransferDelegate?
     
     //MARK: - Life Cycles
     
@@ -94,13 +101,35 @@ extension HomepageView: UITableViewDataSource {
 //MARK: - UITableViewDelegate
 
 extension HomepageView: UITableViewDelegate {
-    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let newsDetail = NewsDetailView()
+        newsDetail.homepage = self
+        let selectedNews = tableViewData[indexPath.row]
+
+        self.navigationController?.pushViewController(newsDetail, animated: true)
+        delegate?.didSubmitData(data: selectedNews)
+        
+        
+    }
 }
 
 //MARK: - UISearchBarDelegate
 
 extension HomepageView: UISearchBarDelegate {
-    
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        if searchText == "" {
+            DispatchQueue.main.async {
+                self.newsTableView.reloadData()
+            }
+        } else {
+            viewModel.searchNews(for: searchText) { searchArray in
+                DispatchQueue.main.async {
+                    self.tableViewData = searchArray
+                    self.newsTableView.reloadData()
+                }
+            }
+        }
+    }
 }
 
 extension HomepageView: HomepageViewModelProtocol {

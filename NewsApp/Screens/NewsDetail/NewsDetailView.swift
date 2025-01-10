@@ -9,11 +9,19 @@ import UIKit
 
 class NewsDetailView: UIViewController {
 
+    var homepage: HomepageView = .init()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        // Do any additional setup after loading the view.
+        homepage.delegate = self
     }
 
 
+}
+
+extension NewsDetailView: DataTransferDelegate {
+    func didSubmitData(data: News) {
+        print("didSubmitData çalıştı.")
+    }
 }
