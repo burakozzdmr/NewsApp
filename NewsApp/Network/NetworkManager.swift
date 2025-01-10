@@ -85,7 +85,7 @@ class NetworkManager {
     private let apiKey = "31df781063414c8081ba6142b73be248"
     
     func request<T: Codable>(endpoint: Endpoint, completion: @escaping (Result<T, NetworkError>) -> Void) {
-        let request = endpoint.request(apiKey: apiKey, subject: "apple")
+        let request = endpoint.request(apiKey: apiKey, subject: "bitcoin")
         
         switch request {
         case .success(let request):

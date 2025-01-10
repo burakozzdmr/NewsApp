@@ -25,14 +25,16 @@ class HomepageView: UIViewController {
     
     private let newsTableView: UITableView = {
         let tableView = UITableView()
-        tableView.rowHeight = 200
+        tableView.rowHeight = 150
         tableView.separatorStyle = .none
         tableView.showsHorizontalScrollIndicator = false
         tableView.showsVerticalScrollIndicator = true
+        tableView.register(NewsCell.self, forCellReuseIdentifier: "newsCell")
         return tableView
     }()
     
     var tableViewData: [News] = []
+    var viewModel: HomepageViewModel = .init()
     
     //MARK: - Life Cycles
     
@@ -42,6 +44,7 @@ class HomepageView: UIViewController {
         newsTableView.delegate = self
         newsTableView.dataSource = self
         searchBar.delegate = self
+        viewModel.delegate = self
         
         configureUI()
     }
@@ -98,4 +101,13 @@ extension HomepageView: UITableViewDelegate {
 
 extension HomepageView: UISearchBarDelegate {
     
+}
+
+extension HomepageView: HomepageViewModelProtocol {
+    func didReceiveData(_ data: [News]) {
+        self.tableViewData = data
+        DispatchQueue.main.async {
+            self.newsTableView.reloadData()
+        }
+    }
 }

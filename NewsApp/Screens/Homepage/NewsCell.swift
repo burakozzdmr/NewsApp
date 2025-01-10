@@ -36,12 +36,12 @@ class NewsCell: UITableViewCell {
     private let newsImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.image = UIImage()
-        imageView.contentMode = .scaleAspectFit
+        imageView.contentMode = .scaleAspectFill
         imageView.clipsToBounds = true
         return imageView
     }()
     
-    //MARK: - Initializer 
+    //MARK: - Initializer
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -51,7 +51,7 @@ class NewsCell: UITableViewCell {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+
     //MARK: - Private Methods
     
     private func configureUI() {
@@ -60,19 +60,28 @@ class NewsCell: UITableViewCell {
     }
     
     private func addViews() {
-        addSubview(titleLabel)
-        addSubview(descriptionLabel)
-        addSubview(newsImageView)
+        contentView.addSubview(newsImageView)
+        contentView.addSubview(titleLabel)
+        contentView.addSubview(descriptionLabel)
     }
     
     private func configureConstraints() {
-        titleLabel.snp.makeConstraints { make in
+        newsImageView.snp.makeConstraints { make in
             make.leading.top.equalToSuperview().offset(16)
+            make.width.height.equalTo(100) // Görselin sabit boyutu
+        }
+        
+        titleLabel.snp.makeConstraints { make in
+            make.top.equalToSuperview().offset(16)
+            make.leading.equalTo(newsImageView.snp.trailing).offset(16)
+            make.trailing.equalToSuperview().offset(-16)
         }
         
         descriptionLabel.snp.makeConstraints { make in
-            make.top.equalTo(titleLabel.snp.bottom).offset(16)
-            make.leading.equalToSuperview().offset(16)
+            make.top.equalTo(titleLabel.snp.bottom).offset(8)
+            make.leading.equalTo(newsImageView.snp.trailing).offset(16)
+            make.trailing.equalToSuperview().offset(-16)
+            make.bottom.lessThanOrEqualToSuperview().offset(-16) // Alt boşluk
         }
     }
     
