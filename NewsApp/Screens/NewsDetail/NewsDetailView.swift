@@ -72,6 +72,7 @@ class NewsDetailView: UIViewController {
     }()
     
     var arrivedData: News?
+    var viewModel = NewsDetailViewModel()
     
 //MARK: - Life Cycles
     
@@ -159,21 +160,7 @@ class NewsDetailView: UIViewController {
 //MARK: - Objective-C Methods
     
     @objc private func favouriteButtonTapped(_ sender: UIBarButtonItem) {
-        guard let arrivedData = arrivedData else { return }
-
-        var favourites = UserDefaults.standard.array(forKey: "favouriteNews") as? [[String: String]] ?? []
-
-        let newsData: [String: String] = [
-            "title": arrivedData.title ?? "",
-            "author": arrivedData.author ?? "",
-            "publishedAt": arrivedData.publishedAt ?? "",
-            "description": arrivedData.description ?? "",
-            "urlToImage": arrivedData.urlToImage ?? "",
-            "url": arrivedData.url ?? ""
-        ]
-
-        favourites.append(newsData)
-        UserDefaults.standard.set(favourites, forKey: "favouriteNews")
+        viewModel.addFavouriteNews(data: arrivedData)
     }
     
     @objc private func shareButtonTapped(_ sender: UIBarButtonItem) {
