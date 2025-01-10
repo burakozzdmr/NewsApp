@@ -32,6 +32,8 @@ class HomepageView: UIViewController {
         return tableView
     }()
     
+    var tableViewData: [News] = []
+    
     //MARK: - Life Cycles
     
     override func viewDidLoad() {
@@ -75,11 +77,14 @@ class HomepageView: UIViewController {
 
 extension HomepageView: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        
+        return tableViewData.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        
+        let news = tableViewData[indexPath.row]
+        let cell = tableView.dequeueReusableCell(withIdentifier: "newsCell", for: indexPath) as! NewsCell
+        cell.configureCell(for: news)
+        return cell
     }
 }
 
