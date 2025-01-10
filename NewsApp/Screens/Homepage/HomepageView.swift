@@ -41,7 +41,7 @@ class HomepageView: UIViewController {
     
     var tableViewData: [News] = []
     var viewModel: HomepageViewModel = .init()
-    weak var delegate: DataTransferDelegate?
+    weak var dataDelegate: DataTransferDelegate?
     
     //MARK: - Life Cycles
     
@@ -103,19 +103,18 @@ extension HomepageView: UITableViewDataSource {
 extension HomepageView: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let newsDetail = NewsDetailView()
-        newsDetail.homepage = self
         let selectedNews = tableViewData[indexPath.row]
-
+        
+        self.dataDelegate = newsDetail
+        
         self.navigationController?.pushViewController(newsDetail, animated: true)
-        delegate?.didSubmitData(data: selectedNews)
-        
-        
+        dataDelegate?.didSubmitData(data: selectedNews)
     }
 }
 
 //MARK: - UISearchBarDelegate
 
-extension HomepageView: UISearchBarDelegate {
+extension HomepageView: UISearchBarDelegate {       
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         if searchText == "" {
             DispatchQueue.main.async {
@@ -131,6 +130,8 @@ extension HomepageView: UISearchBarDelegate {
         }
     }
 }
+
+//MARK: - HomepageViewModelProtocol
 
 extension HomepageView: HomepageViewModelProtocol {
     func didReceiveData(_ data: [News]) {
